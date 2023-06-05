@@ -3,25 +3,6 @@ const { ProductModel } = require("../models/Product.model");
 
 const ProductRouter = express.Router();
 
-/**
- * @swagger
- * tags:
- *  name: products
- *  description: All the Api routes releated to user
- */
-
-/**
- * @swagger
- * /create:
- *   post:
- *       summary: This will help you to create products
- *       tags: [products]
- *       responses:
- *            200:
- *                description: For creation of Products
- *            400:
- *                description: Incorrect Request
- */
 
 ProductRouter.post("/create", async (req, res) => {
   try {
@@ -33,20 +14,6 @@ ProductRouter.post("/create", async (req, res) => {
   }
 });
 
-// all filter with search is here
-
-/**
- * @swagger
- * /:
- *   get:
- *       summary: This will get all the products
- *       tags: [products]
- *       responses:
- *            200:
- *                description: For getting all the products also you can do filter by param passin as /products?title="" also you can do searching by this
- *            400:
- *                description: Incorrect Request
- */
 
 
 // Add end year filter in the dashboard
@@ -166,18 +133,7 @@ if (req.query.r) {
   }
 });
 
-/**
- * @swagger
- * /:id:
- *   get:
- *       summary: This will get products by id
- *       tags: [products]
- *       responses:
- *            200:
- *                description: For getting products by id
- *            400:
- *                description: Incorrect Request
- */
+
 
 ProductRouter.get("/:id", async (req, res) => {
   const productID = req.params.id;
@@ -195,18 +151,6 @@ ProductRouter.patch("/update/:id", async (req, res) => {
     .json({ msg: `Product with id ${productID} has been updated` });
 });
 
-/**
- * @swagger
- * /delete/:id:
- *   delete:
- *       summary: This will help you in deleting a product
- *       tags: [products]
- *       responses:
- *            200:
- *                description: For deleting any product by id
- *            400:
- *                description: Incorrect Request
- */
 ProductRouter.delete("/delete/:id", async (req, res) => {
   const productID = req.params.id;
   await ProductModel.findByIdAndDelete({ _id: productID });
