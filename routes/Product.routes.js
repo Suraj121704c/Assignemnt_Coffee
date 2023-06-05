@@ -48,32 +48,48 @@ ProductRouter.post("/create", async (req, res) => {
  *                description: Incorrect Request
  */
 
+
+// Add end year filter in the dashboard
+// Add topics filters in the dashboard
+// Add sector filter in the dashboard
+// Add region filter in the dashboard
+// Add PEST filter in the dashboard
+// Add Source filter in the dashboard
+// Add SWOT filter in the dashboard
+
+
 ProductRouter.get("/", async (req, res) => {
   const filter = {};
   if (req.query.title) {
     filter.title = { $regex: req.query.title, $options: "i" };
   }
-  if (req.query.brand) {
-    filter.brand = { $in: req.query.brand };
+  if (req.query.topic) {
+    filter.topic = { $in: req.query.topic };
   }
-  if (req.query.gender) {
-    filter.gender = { $in: req.query.gender };
+  if (req.query.sector ) {
+    filter.sector  = { $in: req.query.sector  };
   }
-  if (req.query.type) {
-    filter.type = { $in: req.query.type };
+  if (req.query.region) {
+    filter.region = { $in: req.query.region };
   }
-  if (req.query.model) {
-    filter.model = { $in: req.query.model };
+  if (req.query.pestle) {
+    filter.pestle = { $in: req.query.pestle };
   }
-  if (req.query.size) {
-    filter.size = { $in: req.query.size };
+  if (req.query.source) {
+    filter.source = { $in: req.query.source };
+  }
+  if (req.query.country) {
+    filter.country = { $in: req.query.country };
+  }
+  if (req.query.insight) {
+    filter.insight = { $in: req.query.insight };
   }
   
   if (req.query.s) {
       if (req.query.s === "asc") {
-        product = await ProductModel.find(filter).sort({ price: 1 });
+        product = await ProductModel.find(filter).sort({ end_year: 1 });
       } else if (req.query.s === "desc") {
-        product = await ProductModel.find(filter).sort({ price: -1 });
+        product = await ProductModel.find(filter).sort({ end_year: -1 });
       } else if (req.query.s === "") {
         product = await ProductModel.find(filter);
       }
@@ -81,11 +97,48 @@ ProductRouter.get("/", async (req, res) => {
       return ;
   }
 
+  if (req.query.i) {
+    if (req.query.i === "asc") {
+      product = await ProductModel.find(filter).sort({ intensity: 1 });
+    } else if (req.query.i === "desc") {
+      product = await ProductModel.find(filter).sort({ intensity: -1 });
+    } else if (req.query.i === "") {
+      product = await ProductModel.find(filter);
+    }
+    res.send(product);
+    return ;
+}
+    
+  if (req.query.l) {
+    if (req.query.l === "asc") {
+      product = await ProductModel.find(filter).sort({ likelihood: 1 });
+    } else if (req.query.l === "desc") {
+      product = await ProductModel.find(filter).sort({ likelihood: -1 });
+    } else if (req.query.l === "") {
+      product = await ProductModel.find(filter);
+    }
+    res.send(product);
+    return ;
+}
+
+if (req.query.r) {
+  if (req.query.r === "asc") {
+    product = await ProductModel.find(filter).sort({ relevance: 1 });
+  } else if (req.query.r === "desc") {
+    product = await ProductModel.find(filter).sort({ relevance: -1 });
+  } else if (req.query.r === "") {
+    product = await ProductModel.find(filter);
+  }
+  res.send(product);
+  return ;
+}
+
+
   if(req.query.p) {
     if (req.query.p === "asc") {
-      product = await ProductModel.find(filter).sort({ offer_percent: 1 });
+      product = await ProductModel.find(filter).sort({ start_year: 1 });
     } else if (req.query.p === "desc") {
-      product = await ProductModel.find(filter).sort({ offer_percent: -1 });
+      product = await ProductModel.find(filter).sort({ start_year: -1 });
     } else if (req.query.p === "") {
       product = await ProductModel.find(filter);
     }
@@ -94,7 +147,7 @@ ProductRouter.get("/", async (req, res) => {
   }
 
   const pageNumber = parseInt(req.query.page) || 1;
-  const pageSize = parseInt(req.query.limit) || 10;
+  const pageSize = parseInt(req.query.limit) || 20;
   const skip = (pageNumber - 1) * pageSize;
 
   try {
@@ -132,74 +185,6 @@ ProductRouter.get("/:id", async (req, res) => {
   res.send(product);
 });
 
-/**
- * @swagger
- * /price_sort/:s:
- *   get:
- *       summary: This will get you sort by price
- *       tags: [products]
- *       responses:
- *            200:
- *                description: For getting sort by price so asc for ascending and desc for descending
- *            400:
- *                description: Incorrect Request
- */
-
-ProductRouter.get("/price/price_sort", async (req, res) => {
-  const { s } = req.query;
-  try {
-    let product;
-    if (s === "asc") {
-      product = await ProductModel.find().sort({ price: 1 });
-    } else if (s === "desc") {
-      product = await ProductModel.find().sort({ price: -1 });
-    }
-    res.send(product);
-  } catch (err) {
-    res.status(400).json({ err: err.message });
-  }
-});
-
-/**
- * @swagger
- * /discount/:s:
- *   get:
- *       summary: This will get you sort by discount
- *       tags: [products]
- *       responses:
- *            200:
- *                description: For getting sort by discount so asc for ascending and desc for descending
- *            400:
- *                description: Incorrect Request
- */
-
-ProductRouter.get("/price/discount", async (req, res) => {
-  const { s } = req.query;
-  try {
-    let product;
-    if (s === "asc") {
-      product = await ProductModel.find().sort({ offer_percent: 1 });
-    } else if (s === "desc") {
-      product = await ProductModel.find().sort({ offer_percent: -1 });
-    }
-    res.send(product);
-  } catch (err) {
-    res.status(400).json({ err: err.message });
-  }
-});
-
-/**
- * @swagger
- * /update/:id:
- *   patch:
- *       summary: This will get you to update by id
- *       tags: [products]
- *       responses:
- *            200:
- *                description: For updating data product if it has any wrong thing
- *            400:
- *                description: Incorrect Request
- */
 
 ProductRouter.patch("/update/:id", async (req, res) => {
   const payload = req.body;
@@ -228,30 +213,7 @@ ProductRouter.delete("/delete/:id", async (req, res) => {
   res.status(200).json({ msg: `Device with id ${productID} has been deleted` });
 });
 
-/**
- * @swagger
- * /page/:page:
- *   get:
- *       summary: This will help you in pageinition process
- *       tags: [products]
- *       responses:
- *            200:
- *                description: do /page/1 to get data of front page in one page there are 15 products and over all there are 5 pages total
- *            400:
- *                description: Incorrect Request
- */
-ProductRouter.get("/price/page", async (req, res) => {
-  const { p } = req.query;
-  try {
-    const page = Number(p);
-    const product = await ProductModel.find()
-      .skip((page - 1) * 15)
-      .limit(15);
-    res.json(product);
-  } catch (err) {
-    res.status(400).json({ err: err.message });
-  }
-});
+
 
 module.exports = {
   ProductRouter,
