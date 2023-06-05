@@ -16,7 +16,7 @@ const userRouter = express.Router();
  * @swagger
  * /register:
  *   post:
- *       summary: This will help you in creating new users 
+ *       summary: This will help you in creating new users
  *       tags: [users]
  *       responses:
  *            200:
@@ -25,8 +25,9 @@ const userRouter = express.Router();
  *                description: Incorrect Request
  */
 
+
 userRouter.post("/register", async (req, res) => {
-  const { first_name, second_name, email, gender, pass, age } = req.body;
+  const { first_name, second_name, email, pass } = req.body;
   try {
     bcrypt.hash(pass, 5, async (err, hash) => {
       if (err) {
@@ -37,8 +38,6 @@ userRouter.post("/register", async (req, res) => {
           first_name,
           second_name,
           email,
-          gender,
-          age,
           pass: hash,
         });
         await user.save();
@@ -54,7 +53,7 @@ userRouter.post("/register", async (req, res) => {
  * @swagger
  * /login:
  *   post:
- *       summary: This will help you in gettin login 
+ *       summary: This will help you in gettin login
  *       tags: [users]
  *       responses:
  *            200:
@@ -88,7 +87,7 @@ userRouter.post("/login", async (req, res) => {
  * @swagger
  * /admin:
  *   post:
- *       summary: This will help you in login as admin 
+ *       summary: This will help you in login as admin
  *       tags: [users]
  *       responses:
  *            200:
@@ -109,5 +108,16 @@ userRouter.post("/admin", async (req, res) => {
     res.status(400).json({ msg: "wrong credentials!!! Try again..." });
   }
 });
+
+
+userRouter.get("/", async (req, res) => {
+  try {
+    const data = await UserModel.find();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: `Failed to fetch data` });
+  }
+});
+
 
 module.exports = { userRouter };
