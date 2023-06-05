@@ -2,7 +2,6 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { UserModel } = require("../models/User.models");
-const { User_validate } = require("../middleware/User.validator");
 
 const userRouter = express.Router();
 
@@ -26,7 +25,7 @@ const userRouter = express.Router();
  *                description: Incorrect Request
  */
 
-userRouter.post("/register", User_validate, async (req, res) => {
+userRouter.post("/register", async (req, res) => {
   const { first_name, second_name, email, gender, pass, age } = req.body;
   try {
     bcrypt.hash(pass, 5, async (err, hash) => {

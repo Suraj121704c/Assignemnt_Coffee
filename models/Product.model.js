@@ -1,17 +1,24 @@
 const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema({
-  image: String,
+  end_year: Number,
+  intensity: Number,
+  sector: String,
+  topic: String,
+  insight: String,
+  url: String,
+  region: String,
+  start_year: String,
+  impact: String,
+  added: Array,
+  published: Array,
+  country: String,
+  relevance: Number,
+  pestle: String,
+  source: String,
   title: String,
-  brand: String,
-  price: Number,
-  before_disc: Number,
-  offer_percent: Number,
-  gender: String,
-  type: String,
-  model: String,
-  size: Array,
-  Quantity: Number,
+  likelihood: Number,
+  user: String,
 });
 
 const ProductModel = mongoose.model("product", productSchema);

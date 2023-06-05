@@ -32,8 +32,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRouter);
-app.use("/products", ProductRouter);
 app.use(authenticate);
+app.use("/products", ProductRouter);
+
 
 app.listen(process.env.PORT, async () => {
   try {
