@@ -36,12 +36,12 @@ app.use(authenticate);
 app.use("/products", ProductRouter);
 
 
-app.listen(process.env.PORT, async () => {
+app.listen(5000, async () => {
   try {
     await connection;
     console.log("Connected to Atlas Server...");
   } catch (error) {
     console.log(error.message);
   }
-  console.log(`Server is running at port ${process.env.port}...`);
+  console.log(`Server is running at port 5000...`);
 });
