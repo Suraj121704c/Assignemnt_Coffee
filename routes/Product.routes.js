@@ -54,7 +54,7 @@ ProductRouter.get("/", async (req, res) => {
   
   if (req.query.s) {
       if (req.query.s === "asc") {
-        product = await ProductModel.find(filter).sort({ end_year: 1 });
+        product = await ProductModel.find(filter).sort({ start_year: 1 });
       } else if (req.query.s === "desc") {
         product = await ProductModel.find(filter).sort({ end_year: -1 });
       } else if (req.query.s === "") {
